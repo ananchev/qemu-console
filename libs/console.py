@@ -12,7 +12,6 @@ logger = logger.getChild('console')
 class QEMUConsole():
 
     vms={} # dict with all managed vms and their status info
-    qmp_retval = None  # store the return values of QMP commands for use accross methods
 
     def __init__(self) -> None:
         # Load the application configuration
@@ -46,11 +45,9 @@ class QEMUConsole():
             else:
                 self.vms[vm] = {"process":"not running"} 
 
-        return managed_vm_names
 
 
-
-    def _is_vm_process_running(self, vm_name):
+    def is_vm_process_running(self, vm_name):
         vm_info = self.vms.get(vm_name, None)
         if vm_info['process'] in "alive":
             return True
@@ -59,22 +56,22 @@ class QEMUConsole():
 
 
     def _fetch_vm_status(self, vm_name):
-        self._execute_QMP_command(vm_name, command='query-status')
+        retval = self.execute_QMP_command(vm_name, command='query-status')
 
         # retval comes as {'return': {'status': 'paused', 'singlestep': False, 'running': False}}
-        vm_status = self.qmp_retval['return']['status']
+        vm_status = retval['return']['status']
         self.vms[vm_name]['status']=vm_status
 
 
     
-    def _execute_QMP_command(self, vm_name, command, command_arguments={}):
-        if not self._is_vm_process_running(vm_name):
+    def execute_QMP_command(self, vm_name, command, command_arguments={}):
+        if not self.is_vm_process_running(vm_name):
             logger.info(f"QEMU process for '{vm_name}' is not running")
-            return False
+            return None
         monitor = qmp.QEMUMonitorProtocol(address=f"{self.conf['Locations']['sockets']}/{vm_name}.sock")
         monitor.connect()
         msg = {'execute': command,
                'arguments': command_arguments}
-        self.qmp_retval = monitor.cmd_obj(qmp_cmd=msg)
+        retval = monitor.cmd_obj(qmp_cmd=msg)
         monitor.close
-        return True
+        return retval

@@ -29,9 +29,25 @@ def qmp_test():
     # msg = {'execute': 'query-status'}
     # msg = {'execute': 'cont'}
     # msg = {'execute': 'stop'}   #{'return': {'status': 'paused', 'singlestep': False, 'running': False}}
-    msg = {'execute': 'system_powerdown'}   
+    # msg = {'execute': 'system_powerdown'}
+    msg = {
+        'execute': 'query-block-jobs'
+    }   
+    # msg = {
+    #     "execute": "block-job-cancel",
+    #     "arguments": {
+    #     "device": "job-bckp-manjaro"
+    #     } 
+    # }
     r = monitor.cmd_obj(qmp_cmd=msg)
     print(r)
+
+
+def parse():
+    str = {'return': [{'auto-finalize': True, 'io-status': 'ok', 'device': 'job-bckp-manjaro', 'auto-dismiss': True, 'busy': True, 'len': 9137881088, 'offset': 2574450688, 'status': 'running', 'paused': False, 'speed': 0, 'ready': False, 'type': 'mirror'}]}
+    # res_json = json.loads(str)
+    ret = str['return'][0]['ready']
+    print (ret)
 
 import subprocess
 def process():
@@ -43,6 +59,6 @@ def process():
 
 if __name__ == '__main__':
     try:
-        qmp_test()
+        parse()
     except Exception as e:
         traceback.print_exc()

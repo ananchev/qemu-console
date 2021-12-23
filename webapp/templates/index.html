@@ -12,7 +12,7 @@
 <a href=# id="shutdown_vm"><button class='button controlled' disabled>Shut Down</button></a>
 <a href=# id="poweroff_vm"><button class='button controlled' disabled>Power Off</button></a>
 <a href=# id="reset_vm"><button class='button controlled' disabled>Reset</button></a>
-
+<a href=# id="backup_vm"><button class='button controlled' disabled>Run Backup</button></a>
 {% endblock %}
 
 {% block logfile_display %}
@@ -39,6 +39,18 @@
         source.close()
       }
     }
+
+    $(function() {
+      $('a#backup_vm').on('click', function(e) {
+        e.preventDefault()
+        $.getJSON('/backup_vm?vm=' + $("#vms-selection option:selected").text(),
+            function(data) {
+          //do nothing
+        });
+        return false;
+      });
+    });
+
 
     $(function() {
       $('a#reset_vm').on('click', function(e) {
@@ -95,7 +107,7 @@
             function(vms) {
               $('#vms-selection').empty()
               $('#vms-selection').append('<option value="not selected">Select VM</option>')
-              for (var vm of vms) {
+              for (var vm of Object.keys(vms)) {
                 $('#vms-selection')
                     .append(`<option value="${vm}">${vm}</option>`);
                 }

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>EnvironmentVariables</key>
+        <dict>
+			<key>PATH</key>
+			<string>/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:</string>
+        </dict>
+	<key>Label</key>
+	<string>com.qemu.console</string>
+	<!--
+		Use the ProgramArguments as below in case the application was build in alias mode
+		This way the source and data files in-place i.e. no standalone application. 
+		The applications built in alias mode are not portable to other machines. 
+		https://py2app.readthedocs.io/en/latest/tutorial.html#running-your-application
+	-->
+	<key>ProgramArguments</key>
+		<array>
+			<string><!--path to quemu-console source folder here-->/dist/qemu-console.app/Contents/MacOS/qemu-console</string>
+			<string>--delay</string>
+			<string>5</string>
+		</array>
+	<!--
+		The ProgramArguments as below are meant for the case when the app is build as redistributable package
+		This way the application is self-contained (can be built on one machine and copied to another)
+	-->
+	<!--
+	<key>ProgramArguments</key>
+	<array>
+		<string>/usr/bin/open</string>
+		<string>-W</string>
+		<string>/Applications/qemu-console.app</string>
+		<string>-d</string>
+		<string>5</string>
+	</array>
+	-->
+	<key>RunAtLoad</key>
+	<true/>
+	<key>StandardOutPath</key>
+	<string>/tmp/qemu-console.stdout</string>
+	<key>StandardErrorPath</key>
+	<string>/tmp/qemu-console.stderr</string>
+</dict>
+</plist>

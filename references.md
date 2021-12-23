@@ -14,7 +14,6 @@ credit Sean Swehla: https://gist.github.com/kitschysynq/867caebec581cee4c44c764b
 ps -ef | awk -e '/qemu/ && !/awk/' | sed -e 's/[^/]*//' -e 's/ -/\n\t-/g'
 ```
 
-
 ## Using git submodule and a symlink
 Once you have a submodule ready, you can just add filesystem symlinks pointing into the submodule directory structure.
 Run this in a shell in your project directory:
@@ -25,3 +24,9 @@ $ git add .gitmodules logback.xml
 $ git commit -m "add a symbolic link to logback.xml with the respective submodule"
 ```
 
+## Installing qemu.qmp python package
+Add the submodule as described in above
+Run the command below from the root of qemu-console:
+```
+python -m pip -e install qemu/python
+```

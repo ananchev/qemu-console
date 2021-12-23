@@ -7,9 +7,11 @@ Usage:
 
 from setuptools import setup
 
-APP = ['run.py']
+APP = ['qemu-console.py']
 DATA_FILES = []
-OPTIONS = {'resources':['logs']}
+OPTIONS = {'resources':['logs','config.ini'],
+           'argv_emulation':True,
+          }
 
 setup(
     app=APP,
