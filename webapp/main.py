@@ -82,7 +82,8 @@ def run_reset_vm():
 def run_backup_vm():
     vm_name = request.args.get('vm')
     backup_target = request.args.get('target')
-    retval = bckp_console.backup_vm(vm_name, backup_target)
+    disk_to_backup = request.args.get('disk')
+    retval = bckp_console.backup_vm(vm_name, backup_target, disk_to_backup)
     return jsonify(retval) 
 
 

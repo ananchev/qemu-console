@@ -94,12 +94,11 @@ Loading the LaunchDaemon job ```boot.shutdown.service.plist``` would then make s
 ## Backups
 The application backup functionality can be called from the web interface button or via *curl*.
 * In the first scenario a full backup of the VM main disk (see [QEMU Run Scripts](qemu-run-scripts)) under the backup folder as defined in ```config.ini```. The backup filename is built as ```<vm-name>_<yyyymmddhhmmss>.qcow2``` and would contain the VM state at the moment when the backup command was started.
-* If started via *curl* two formats can be used:
+* If started via *curl* multiple formats can be used:
     1. Create the backup as if it was requested via the web interface. 
        Use ```curl "<qemu-console url:port>/backup_vm?vm=<vm_name>"```
     2. Create the backup specifying the full path incl. target filename for the backup.
        Use ```curl "<qemu-console url:port>/backup_vm?vm=<vm_name>&target=<path_to_backup_img>.qcow2"```. When using this option plase ensure that the directory path is already existing. The requested filename.qcow2 will be automatically created under it.
+    3. Create a backup of a specific vm disk, different than the default specified by the ```os_disk_id```-key in ```config.ini```: use ```curl "<qemu-console url:port>/backup_vm?vm=<vm_name>&disk=<drive_id_as_in_run_script>"```
   
-  The second format of curl request could be rather useful for automating VM backups at specific intervals usign e.g. cron or launchd jobs.
-
-
+  Using curl requests as shown above could be rather useful for automating VM backups at specific intervals by e.g. cron or launchd jobs.

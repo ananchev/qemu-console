@@ -28,16 +28,22 @@ class QEMUBackup(QEMUConsole):
         return False
 
 
-    def backup_vm(self,vm_name, backup_target=None):
+    def backup_vm(self,vm_name, backup_target=None, disk_to_backup=None):
         if not self._vm_running(vm_name):
             return {vm_name:"process not running"}
 
         if backup_target is None:
-            backup_target = f"{self.conf['Locations']['backups']}/{vm_name}_{self._current_date_time()}.qcow2"
+            backup_target = f"{self.conf['Locations']['backups']}/{vm_name}"
+
+        if disk_to_backup is None:
+            disk_to_backup = self.conf['Identifiers']['os_disk_id']
+       
+        # add disk name and timestamp suffix to backup target name
+        backup_target = backup_target + "_" + disk_to_backup + "_" + self._current_date_time() + ".qcow2"
 
         command = "drive-mirror"
         arguments = {
-                        "device": self.conf['Identifiers']['os_disk_id'],
+                        "device": disk_to_backup,
                         "job-id": f"job-bckp-{vm_name}",
                         "target": f"{backup_target}",
                         "sync": "full"
